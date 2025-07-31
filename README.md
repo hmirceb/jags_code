@@ -14,5 +14,7 @@ The paper describes a general model to estimate average population growth rates 
 
 ## References
 MacKenzie, D. I., Nichols, J. D., Lachman, G. B., Droege, S., Andrew Royle, J., & Langtimm, C. A. (2002). Estimating site occupancy rates when detection probabilities are less than one. Ecology, 83(8), 2248-2255. https://doi.org/10.1890/0012-9658(2002)083[2248:ESORWD]2.0.CO;2
+
 Royle, J. A. (2004). N ‐Mixture Models for Estimating Population Size from Spatially Replicated Counts. Biometrics, 60(1), 108-115. https://doi.org/10.1111/j.0006-341X.2004.00142.x
+
 Wright, W. J., Irvine, K. M., Warren, J. M., & Barnett, J. K. (2017). Statistical design and analysis for plant cover studies with multiple sources of observation errors. Methods in Ecology and Evolution, 8(12), 1832-1841. https://doi.org/10.1111/2041-210X.12825
