@@ -1,0 +1,59 @@
+
+model{
+  # Priors:
+  psi ~ dunif(0, 1) # Probability of detection
+  gamma0 ~ dt(0, 0.01, 1) # Intercept and slope of cover on detection probability
+  gamma1 ~ dt(0, 0.04, 1)
+
+  # Prior for the initial plant cover in each subplot. One for each subdivision of a plot
+  for(i in 1:Nsubplots){
+    Num[i] ~ dunif(0.001, 0.999)   
+  }
+  
+
+  loglam_prec ~ dgamma(0.001, 0.001)   # Prior for the precision of the average growth rate
+  process_var <- (1/loglam_prec)   # SD of the average growth rate
+  mean_log_lambda ~ dnorm(0, 0.001)   # Prior for the average growth rate
+
+  # Prior for each yearly growth rate
+  #logmu[1] <- 0 # First slope = 0 so that the initial cover value == intercept
+  for(i in 1:(nyears-1)){
+    logmu[i] ~ dnorm(mean_log_lambda, loglam_prec)
+  }
+
+
+   phi ~ dgamma(0.001, 0.001) # Prior for precision of beta distribution
+  # phi.t <- pow(phi, -0.5)
+
+  tau ~ dgamma(0.001, 0.001) # Prior for observation error precision
+  sigma <- sqrt(1/tau) # Prior for observation error SD
+
+
+  for (t in 1:(nyears-1)) {
+    for (p in 1:Nsubplots) {
+      Num[t*Nsubplots+p] <- plogis(Num[(t-1)*Nsubplots+p]*exp(logmu[t]),0.5,1/0.2)
+    }
+    }
+
+
+  # Observation process: one,zero
+  for(i in 1:N1){
+    logit(p[i]) <- gamma0 + gamma1*Num[i] # Effect of plant cover on detection probability
+
+    for(j in 1:V1[i]){
+      x[i, j] ~ dbern(p[i])
+    }}
+# 
+# 
+  # Observation process: non-zeros
+  for(i in 1:N1){
+    alpha[i] = phi*Num[i]
+    beta[i] = phi*(1-Num[i])
+
+   # y[i] ~ dbeta(alpha[i], beta[i])T(0.00001, 0.99999)
+
+    for(j in 1:V2[i]){
+      u.array.obs[i, j] ~ dbeta(alpha[i], beta[i])
+    }
+  }
+}

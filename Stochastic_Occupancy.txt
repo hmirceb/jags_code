@@ -1,0 +1,49 @@
+
+    model {
+    # Specify priors and model for occupancy
+    for(t in 1:(nyears-1)){
+    logit(psi[t+1]) <- logit(psi[1]) + sum(beta.slope[1:t]) + plot_randomeffect[plot_level[t]]
+    }
+    
+    for(t in 1:nyears){
+    p[t] ~ dunif(0,1)
+    }
+    
+    # Plot random effect
+  for(plot_iterator in 1:n_plots){
+    plot_randomeffect[plot_iterator] ~ dnorm(0, plot_precision)
+  }
+    
+    psi[1] <- mean.psi
+    psi.trend[1] <- mean.psi
+    mean.psi ~ dunif(0,1)
+    beta.tau ~ dgamma(0.001, 0.001)
+    process_sd <- sqrt(1/beta.tau)
+    mean_log_lambda ~ dnorm(0, 0.001)
+    for(t in 1:(nyears-1)){
+        beta.slope[t] ~ dnorm(mean_log_lambda, beta.tau)
+    }
+
+    plot_precision ~ dgamma(0.001, 0.001)
+    plot_sd <- sqrt(1/plot_precision)
+  
+    # Ecological submodel: Define state conditional on parameters
+    for(i in 1:nsites){
+      for(t in 1:nyears){
+      z[i,t] ~ dbern(psi[t])
+      # Observation model
+        for(j in 1:nsurveys){
+          y[i,j,t] ~ dbern(z[i,t]*p[t])
+        }
+      }
+    }
+    
+    # Derived parameters
+    for(t in 1:nyears){
+    n.occ[t] <- sum(z[1:nsites, t]) # Finite sample occupancy
+    }
+    for(t in 1:(nyears-1)){
+    logit(psi.trend[t+1]) <- logit(psi.trend[1]) + sum(beta.slope[1:t]) + plot_randomeffect[plot_level[t]]
+    }
+    }
+    

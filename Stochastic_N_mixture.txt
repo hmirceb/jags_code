@@ -1,0 +1,61 @@
+# From Applied Hierarchical Modeling in Ecology_ Analysis of -- Marc Kéry, J_ Andrew Royle -- Volume 2
+model {
+  # Priors
+  #for (t in 1:nyears){
+   # alpha0[t] <- logit(mean.p[t])
+    #mean.p[t] ~ dunif(0, 1)
+#  }
+  mean.p.all~ dunif(0, 1)
+ #obs_precision ~ dgamma(0.001, 0.001)
+  
+  # Define distribution for each yearly growth rate:
+  for(t in 1:(nyears-1)){
+    beta.slope[t] ~ dnorm(mean_log_lambda, beta.tau)
+  }  
+  
+  for(i in 1:nsites){
+    beta0[i] ~ dnorm(0, 0.001)
+  }
+  
+  # Plot random effect
+  for(plot_iterator in 1:nsites){
+    plot_randomeffect[plot_iterator] ~ dnorm(0, plot_precision)
+  }
+  plot_precision ~ dgamma(0.001, 0.001)
+  plot_sd <- sqrt(1/plot_precision)
+  
+  mean_log_lambda ~ dnorm(0, 0.001) 
+  beta.tau ~ dgamma(0.001, 0.001)
+  process_sd <- sqrt(1/beta.tau)
+  
+  # Likelihood
+  # Ecological model for true abundance
+  # At each site i and time t, the true count follows a poisson distribution whose log(lambda) parameter depends on a starting value (beta0, which I don't fully understand)
+  # and the sum of all the previous yearly growth rates in the log scale
+  
+  for (i in 1:nsites){
+    N[i,1] ~ dpois(lambda[i,1])
+    log(lambda[i,1]) <- beta0[i]
+    
+    for(t in 1:(nyears-1)){
+      N[i,t+1] ~ dpois(lambda[i,t+1]) 
+      #log(lambda[i,t+1]) <- log(lambda[i,t]) + sum(beta.slope[1:t]) + plot_randomeffect[plot_level[i]]
+       log(lambda[i,t+1]) <- log(lambda[i,t]) + beta.slope[t] + plot_randomeffect[plot_level[i]]
+
+      # Observation model for replicated counts
+      for (j in 1:nsurveys){
+        
+       # C[i,j,t] ~ dnorm(N[i,t],obs_precision)
+       C[i,j,t] ~ dbin(mean.p.all, N[i,t]) #dbin(p[i,j,t], N[i,t])
+        #p[i,j,t] <- mean.p.all
+      }
+    }
+  }
+  
+  # obs variance
+ # obs.var <- 1/obs.precision
+  # Derived quantity: Total abundance across all surveyed sites
+  for (t in 1:nyears){
+    totalN[t] <- sum(N[,t])
+  }
+}
