@@ -1,2 +1,9 @@
 # jags_code
 JAGS code from Miranda-Cebrián, H., Doak, D.F. and García, M.B. (2025). Sampling design and estimates of observation error greatly reduce quasi-extinction probability in plant populations. Biological Conservation. 306, 111141. (https://doi.org/10.1016/j.biocon.2025.111141)
+
+## Abstract
+Estimates of population dynamics and risk of extinction are sensitive to both mean rates of annual change and also the variation in these rates caused by environmental stochasticity. The analytical machinery to incorporate the latter into estimates of long-term stochastic growth and quasi-extinction risk are well developed for count-based population data. However, analytical methods rarely account for the effects of observation error during the sampling process, which can inflate apparent stochasticity and thus alter estimates of population behavior. Here, we applied a Bayesian stochastic population model to estimate the growth rates and quasi-extinction risk of over 157 plant populations monitored through a collaborative science program in NE Spain, and calculated the effect of incorporating direct measures of the observation error into our estimates. We found that including the observation error into models reduced the estimated temporal variation of all populations, which in turn resulted in modest increases in estimated long-term growth rates but considerable reductions in quasi-extinction risk. In this study we show how adjusting sampling designs to the size, detectability and density of plant populations, and repeating surveys in one or more years substantially improves estimates of population growth and viability, thus contributing to guide a better conservation practice.
+
+### Dynamic N-mixture model for counts
+### Dynamic occupancy model
+### Dynamic Zero-Augmented Beta Regression with Error (ZABE) 
