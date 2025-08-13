@@ -19,8 +19,8 @@ library(runjags) # For easier interaction with JAGS
 #------------#
 #### Data ####
 #------------#
-# Example data from a real population of Acatea spicata under monitoring in the Adopt a Plant citizen science program:
-count_data <- data.frame(taxon = 'Acatea_spicata',
+# Example data from a real population of Acataea spicata under monitoring in the Adopt a Plant citizen science program:
+count_data <- data.frame(taxon = 'Acataea_spicata',
                          N = c(62, 51, 52, 41, 59, 59, 98, 21, 46, 25, 17, 19, 20, 18, 37, 20, 29, 22, 26, 14, 35, 14, 9, 13, 
                                11, 15, 14, 12, 25, 29, 27, 71, 27, 30, 49, 25, 13, 17, 15, 13, 13, 14),
                          N2 = c(NA, NA, NA, 42, 57, NA, 102, 24, 49, NA, NA, NA, 19, 18, NA, NA, NA, 22, 28, NA,
@@ -139,3 +139,4 @@ population_model # Model summary
 plot(population_model) # Convergence plots
 
 #### END OF SCRIPT ####
+
